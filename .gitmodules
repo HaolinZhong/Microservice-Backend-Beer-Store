@@ -1,0 +1,24 @@
+[submodule "brewery-config-repo"]
+	path = brewery-config-repo
+	url = https://github.com/HaolinZhong/brewery-config-repo.git
+[submodule "brewery-config-server"]
+	path = brewery-config-server
+	url = https://github.com/HaolinZhong/brewery-config-server.git
+[submodule "brewery-eureka"]
+	path = brewery-eureka
+	url = https://github.com/HaolinZhong/brewery-eureka.git
+[submodule "brewery-gateway"]
+	path = brewery-gateway
+	url = https://github.com/HaolinZhong/brewery-gateway.git
+[submodule "brewery-bom"]
+	path = brewery-bom
+	url = https://github.com/HaolinZhong/brewery-bom.git
+[submodule "brewery-inventory-service"]
+	path = brewery-inventory-service
+	url = https://github.com/HaolinZhong/brewery-inventory-service.git
+[submodule "brewery-inventory-failover"]
+	path = brewery-inventory-failover
+	url = https://github.com/HaolinZhong/brewery-inventory-failover.git
+[submodule "brewery-order-service"]
+	path = brewery-order-service
+	url = https://github.com/HaolinZhong/brewery-order-service.git
