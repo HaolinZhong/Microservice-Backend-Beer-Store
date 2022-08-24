@@ -22,3 +22,6 @@
 [submodule "brewery-order-service"]
 	path = brewery-order-service
 	url = https://github.com/HaolinZhong/brewery-order-service.git
+[submodule "brewery-service"]
+	path = brewery-service
+	url = https://github.com/HaolinZhong/brewery-service.git
