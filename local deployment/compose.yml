@@ -1,0 +1,154 @@
+
+
+services:
+
+  activeMQ:
+    image: vromero/activemq-artemis:latest
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+
+  eureka:
+    image: hz2771/brewery-eureka:latest
+    ports:
+      - "8761:8761"
+
+
+  gateway:
+    image: hz2771/brewery-gateway:latest
+    ports:
+      - "9090:9090"
+    depends_on:
+      - "eureka"
+      - "config-server"
+      - "inventory-service"
+      - "inventory-failover"
+      - "brewery-service"
+      - "order-service"
+    environment:
+      spring.profiles.active: local-discovery
+      eureka.client.serviceUrl.defaultZone: http://eurekaUser:eurekaPassword@eureka:8761/eureka/
+      spring.zipkin.baseUrl: http://zipkin:9411
+    restart: on-failure
+  
+  config-server:
+    image: hz2771/brewery-config-server:latest
+    ports:
+      - "8888:8888"
+    depends_on:
+      - "eureka"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaUser:eurekaPassword@eureka:8761/eureka/
+  
+  mysql-beer:
+    image: mysql:oracle
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlpw
+      MYSQL_PASSWORD: mysqlpw
+      MYSQL_USER: brewery_service
+      MYSQL_DATABASE: breweryService
+    ports:
+      - "3306:3306"
+
+  mysql-inventory:
+    image: mysql:oracle
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlpw
+      MYSQL_PASSWORD: mysqlpw
+      MYSQL_USER: brewery_inventory_service
+      MYSQL_DATABASE: breweryInventoryService
+      MYSQL_TCP_PORT: 3307
+    ports:
+      - "3307:3307"
+
+  mysql-order:
+    image: mysql:oracle
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlpw
+      MYSQL_PASSWORD: mysqlpw
+      MYSQL_USER: brewery_order_service
+      MYSQL_DATABASE: breweryOrderService
+      MYSQL_TCP_PORT: 3308
+    ports:
+      - "3308:3308"
+
+
+  brewery-service:
+    image: hz2771/brewery-service:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "eureka"
+      - "config-server"
+      - "activeMQ"
+      - "mysql-beer"
+    environment:
+      spring.datasource.url: jdbc:mysql://mysql-beer:3306/breweryService?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      spring.profiles.active: docker, local-discovery
+      spring.cloud.config.uri: http://MyUserName:MySecretPassword@config-server:8888
+      eureka.client.serviceUrl.defaultZone: http://eurekaUser:eurekaPassword@eureka:8761/eureka/
+      spring.zipkin.baseUrl: http://zipkin:9411
+      spring.artemis.brokerUrl: tcp://activeMQ:61616
+      hz.spring.beerInventoryServiceHost: http://inventory-service:8082
+    restart: on-failure
+  
+
+
+  inventory-service:
+    image: hz2771/brewery-inventory-service:latest
+    ports:
+      - "8082:8082"
+    depends_on:
+      - "eureka"
+      - "config"
+      - "activeMQ"
+      - "mysql-inventory"
+    environment:
+      spring.profiles.active: docker
+      spring.datasource.url: jdbc:mysql://mysql-inventory:3307/breweryInventoryService?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      spring.cloud.config.uri: http://MyUserName:MySecretPassword@config-server:8888
+      eureka.client.serviceUrl.defaultZone: http://eurekaUser:eurekaPassword@eureka:8761/eureka/
+      spring.zipkin.baseUrl: http://zipkin:9411
+      spring.artemis.brokerUrl: tcp://activeMQ:61616
+    restart: on-failure
+
+  
+  inventory-failover:
+    image: hz2771/brewery-inventory-failover:latest
+    ports:
+      - "8083:8083"
+    depends_on:
+      - "eureka"
+      - "config-server"
+      - "activeMQ"
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eurekaUser:eurekaPassword@eureka:8761/eureka/
+      spring.zipkin.baseUrl: http://zipkin:9411
+      spring.artemis.brokerUrl: tcp://activeMQ:61616
+    restart: on-failure
+
+  order-service:
+    image: hz2771/brewery-order-service:latest
+    ports:
+      - "8081:8081"
+    depends_on:
+      - "eureka"
+      - "config-server"
+      - "activeMQ"
+      - "brewery-service"
+      - "mysql-order"
+    environment:
+      spring.profiles.active: docker
+      spring.cloud.config.uri: http://MyUserName:MySecretPassword@config-server:8888
+      eureka.client.serviceUrl.defaultZone: http://eurekaUser:eurekaPassword@eureka:8761/eureka/
+      spring.zipkin.baseUrl: http://zipkin:9411
+      spring.datasource.url: jdbc:mysql://mysql-order:3308/breweryOrderService?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      spring.artemis.brokerUrl: tcp://activeMQ:61616
+      hz.spring.beerServiceHost: http://brewery-service:8080
+    restart: on-failure
+
