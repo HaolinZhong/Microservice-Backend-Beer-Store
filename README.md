@@ -18,11 +18,11 @@ Docker images of every microservices & components were built.
 
 - In your terminal: 
   
-  - `git clone the project`
+  - `git clone [--recursive] https://github.com/HaolinZhong/Microservice-Backend-Beer-Store.git`:  `--recursive` is optional. Ignore it if you don't want source code of submodules in this repo.
   
-  - `cd local-deployment`
+  - `cd local\ deployment/`: change directory to the `local deployment` folder.
 
-  - `docker compose up`
+  - `docker compose up`: let docker download images and run them as containers according to `compose.yml`.
 
   - Wait for 1 or 2 minutes for all the service to be up and functioning.
   
