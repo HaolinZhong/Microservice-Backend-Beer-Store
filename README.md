@@ -1,5 +1,5 @@
 # Microservice-Backend-Beer-Store
-This repo collected various Spring Boot microservices &amp; Spring Cloud components repos, which constitue a backend service for a beer store.
+This repo integrated various Spring Boot microservices &amp; Spring Cloud components repos, which constitue a backend service for a beer store.
 
 Docker images of every microservices & components were built. 
 
