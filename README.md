@@ -5,7 +5,7 @@ Docker images of every microservices & components were built.
 
 - See [`How to deploy`](#how-to-deploy) to deploy the application **within 3 minutes** using docker. 
 
-- See `Ports & APIs` for testing the functionality of the application.
+- See [`Ports & APIs`](#ports--apis) for testing the functionality of the application.
 
 - See [`Project Architecture`](#project-architecture) for a summarization of microservices & Spring Cloud components.
 
@@ -14,7 +14,7 @@ Docker images of every microservices & components were built.
 
 ## How to deploy
 
-- **Before you run it**: Make sure you have installed docker and docker-compose. Allocate enough RAM for your docker containers (8GB may be enough), as 12 containers will be running once started.
+- **Before you run it**: Make sure you have installed docker and docker-compose. Allocate enough RAM for your docker containers (8GB may be enough), as 12 containers will be running simultaneously once started.
 
 - In your terminal: 
   
@@ -28,7 +28,11 @@ Docker images of every microservices & components were built.
   
 - Terminate the application: `docker compose down`
 
-## 
+## Ports & APIs
+
+- `http://localhost:8761/`: Eureka Dashboard showing registered instances.
+  
+  - username: eurekaUser, password: eurekaPassword
 
 
 ## Project Architecture
