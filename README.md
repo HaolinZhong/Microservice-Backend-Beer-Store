@@ -111,6 +111,10 @@ Docker images of every microservices & components were built.
 
 ## Business Logic
 
+![logic](logic.png)
+
+
+
 The main bussiness logic is described as follows. All messages are actually sent to and received from message queues, but for conciseness we directly say, send to / receive from XXX service. The order status is managed by Spring State Machine.
 
 
