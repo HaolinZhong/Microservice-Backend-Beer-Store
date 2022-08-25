@@ -6,7 +6,7 @@ Docker images of every microservices & components were built.
 - See [`How to deploy`](#how-to-deploy) to deploy the application **within 3 minutes** using docker. 
 - See [`Project Architecture`](#project-architecture) for a summarization of microservices & Spring Cloud components.
 - See [`Ports & APIs`](#ports--apis) for testing the functionality of the application.
-- See `Bussiness Logic` for how microservices interact with each other.
+- See [`Business Logic`](#business--logic) for how microservices interact with each other.
 
 
 ## How to deploy
@@ -106,3 +106,40 @@ Docker images of every microservices & components were built.
   | MySQL-order        | 3308 (username: brewery_order_service; password: mysqlpw)    |
 
   
+
+
+
+## Business Logic
+
+The main bussiness logic is described as follows. All messages are actually sent to and received from message queues, but for conciseness we directly say, send to / receive from XXX service. The order status is managed by Spring State Machine.
+
+
+
+- brewery service:
+  - For every 5 seconds, check inventory for every kind of beer through sending HTTP requests to inventory services. If the inventory is lower than the pre-set minimum, send a `brew beer message`.
+  - Upon receiving:
+    - `brew beer message` (from itself): brew the beer at a pre-set amount, then send a `new inventory message` to inventory service.
+    - `validate order message` (from order service): check the beer info in the order is consistent with local storage, then send back the `validation result message`.
+
+
+
+- inventory service
+  - Upon receiving:
+    - `new inventory message` (from brewery service): store new inventory into database
+    - `allocate order message` (from order service): check whether stocks of beers meet the requirement of the order, then send back the `allocation result message`
+    - `deallocate order message` (from order service): re-store the stock of the cancelled order into database.
+
+
+
+- order service
+
+  - For showing the bussiness logic, a user was set in this service who randomly place orders of differents beers & at different amount every 2 seconds.
+  - When an order is placed, the corresponding order object will be created and stored into database. Then, a `validate order message` will be sent to brewery service.
+  - Upon receiving
+    - `validation result` (from brewery service):  if order is valid, update order status to validated, send `allocate order message` to inventory service.
+    - `allocation result` (from inventory service): if stock is enough, update order status to allocated, wait for user to pick up. Otherwise, update order status to pending inventory.
+    - `cancel order`: User may cancel the order at any time point. If the cancelled order is already allocated, send `deallocate order message` to inventory service as a compensating transaction. Otherwise, only update the order status to cancelled (no action needed since no stock allocated).
+    - `validation / allocation error`: if error occured in validation / allocation, update the order status to validation / allocation exception.
+
+  
+
