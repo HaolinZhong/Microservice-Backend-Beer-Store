@@ -6,7 +6,7 @@ Docker images of every microservices & components were built.
 - See [`How to deploy`](#how-to-deploy) to deploy the application **within 3 minutes** using docker. 
 - See [`Project Architecture`](#project-architecture) for a summarization of microservices & Spring Cloud components.
 - See [`Ports & APIs`](#ports--apis) for testing the functionality of the application.
-- See [`Business Logic`](#business--logic) for how microservices interact with each other.
+- See [`Business Logic`](#business-logic) for how microservices interact with each other.
 
 
 ## How to deploy
