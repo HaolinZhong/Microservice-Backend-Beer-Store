@@ -1,5 +1,5 @@
 # Microservice-Backend-Beer-Store
-This repo integrated various Spring Boot microservices &amp; Spring Cloud components repos, which constitue a backend service for a beer store.
+This repo integrated various Spring Boot microservices &amp; Spring Cloud components repos, which constitute a backend service for a beer store.
 
 Docker images of every microservices & components were built. 
 
@@ -44,7 +44,12 @@ Docker images of every microservices & components were built.
 - `http://localhost: 9411/zipkin`: Zipkin Dashboard for visulization of traces.
 
   - try any of the gateway api below to let `Gateway` appear on the tracing map.
+
   - try to manually shut down `Inventory Service` to let `Inventory Failover` appear on the tracing map.
+
+  - a full view of traces:
+
+    <img src="traces.png" alt="traces" style="zoom:75%;" />
 
   
 
@@ -81,3 +86,23 @@ Docker images of every microservices & components were built.
     - `/api/v1/customers/{customerId}/orders/{orderId}/pickup`
       - `PUT`: change the designated order status to `PICKED_UP`, if the current order status is `ALLOCATED`.
 
+
+
+- List of ports of all containers:
+
+  | Service Name       | Port                                                         |
+  | ------------------ | ------------------------------------------------------------ |
+  | Brewery Service    | 8080                                                         |
+  | Order Service      | 8081                                                         |
+  | Inventory Service  | 8082 (username: MyInventory; password: MyInventoryPw)        |
+  | Inventory Failover | 8083                                                         |
+  | JMS (Active MQ)    | 8161 (management console; username: artemis; password: simetraehcapa)<br />61616 (broker url) |
+  | Eureka             | 8761 (username: eurekaUser; password: eurekaPassword)        |
+  | Config Server      | 8888 (username: MyUsername; password: MySecretPassword)      |
+  | Gateway            | 9090                                                         |
+  | Zipkin             | 9411                                                         |
+  | MySQL-beer         | 3306 (username: brewery_service; password: mysqlpw)          |
+  | MySQL-inventory    | 3307 (username: brewery_inventory_service; password: mysqlpw) |
+  | MySQL-order        | 3308 (username: brewery_order_service; password: mysqlpw)    |
+
+  
