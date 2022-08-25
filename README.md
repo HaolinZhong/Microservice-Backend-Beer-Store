@@ -96,7 +96,7 @@ Docker images of every microservices & components were built.
   | Order Service      | 8081                                                         |
   | Inventory Service  | 8082 (username: MyInventory; password: MyInventoryPw)        |
   | Inventory Failover | 8083                                                         |
-  | JMS (Active MQ)    | 8161 (management console; username: artemis; password: simetraehcapa)<br />61616 (broker url) |
+  | JMS (Active MQ)    | 8161 (management console; username: artemis; password: simetraehcapa)<br />61616 (broker) |
   | Eureka             | 8761 (username: eurekaUser; password: eurekaPassword)        |
   | Config Server      | 8888 (username: MyUsername; password: MySecretPassword)      |
   | Gateway            | 9090                                                         |
