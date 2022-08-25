@@ -88,7 +88,7 @@ Docker images of every microservices & components were built.
 
 
 
-- List of ports of all containers:
+- Ports of all containers:
 
   | Service Name       | Port                                                         |
   | ------------------ | ------------------------------------------------------------ |
